@@ -13,9 +13,9 @@ WORKDIR /app
 COPY go.mod go.sum ./
 RUN go mod download
 
-COPY *.go ./
+ADD . .
 
-RUN CGO_ENABLED=0 GOOS=linux go build -o /nico
+RUN CGO_ENABLED=0 GOOS=linux go build -o /cmd/main.go
 
 # Run the tests in the container
 FROM build-stage AS run-test-stage
