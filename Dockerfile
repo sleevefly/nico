@@ -15,7 +15,7 @@ RUN go mod download
 
 ADD . .
 
-RUN CGO_ENABLED=0 GOOS=linux go build -o /cmd/main.go
+RUN CGO_ENABLED=0 GOOS=linux go build -o bin/nico /cmd/main.go
 
 # Run the tests in the container
 FROM build-stage AS run-test-stage
@@ -26,7 +26,7 @@ FROM centos AS build-release-stage
 
 WORKDIR /
 
-COPY --from=build-stage /nico /nico
+COPY --from=build-stage /app/bin/nico /nico
 
 EXPOSE 8848
 
