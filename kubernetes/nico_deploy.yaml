@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nico-server
+  labels:
+    app: nico-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nico-server
+  template:
+    metadata:
+      name: nico-server
+      labels:
+        app: nico-server
+    spec:
+      containers:
+        - name: nico-server
+          image: nico-9001:v1.8
+          imagePullPolicy: IfNotPresent
+      restartPolicy: Always
+      
