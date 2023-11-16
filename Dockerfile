@@ -7,17 +7,15 @@ ENV GOOS linux
 ENV GOPROXY https://goproxy.cn,direct
 ENV GO111MODULE on
 WORKDIR /app
+
 COPY go.mod go.sum ./
 RUN go mod download
-COPY *.go ./
-RUN CGO_ENABLED=0 GOOS=linux go build -o  /nico
 
-FROM centos AS build-release-stage
+ADD . .
 
-WORKDIR /
+RUN CGO_ENABLED=0 GOOS=linux go build -o /bin/nico ./cmd/main.go
 
-COPY --from=build-stage /nico /nico
 
 EXPOSE 8848
 
-ENTRYPOINT ["/nico"]
+ENTRYPOINT [ "/bin/nico" ]
