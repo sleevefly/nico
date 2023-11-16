@@ -15,20 +15,20 @@ RUN go mod download
 
 COPY *.go ./
 
-RUN CGO_ENABLED=0 GOOS=linux go build -o /docker-gs-ping
+RUN CGO_ENABLED=0 GOOS=linux go build -o /nico
 
 # Run the tests in the container
 FROM build-stage AS run-test-stage
 RUN go test -v ./...
 
 # Deploy the application binary into a lean image
-FROM gcr.io/distroless/base-debian11 AS build-release-stage
+FROM centos AS build-release-stage
 
 WORKDIR /
 
-COPY --from=build-stage /docker-gs-ping /docker-gs-ping
+COPY --from=build-stage /nico /nico
 
-EXPOSE 8080
+EXPOSE 8848
 
 USER nonroot:nonroot
 
