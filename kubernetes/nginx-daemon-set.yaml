@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: nginx
+  labels:
+    app: Title
+spec:
+  selector:
+    matchLabels:
+      app: Title
+  template:
+    metadata:
+      name: Title
+      labels:
+        app: Title
+    spec:
+      containers:
+        - name: Title
+          image: Image
+          imagePullPolicy: IfNotPresent
+      restartPolicy: Always
+      
