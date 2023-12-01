@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: Title
-          image: Image
+          image: redis
           imagePullPolicy: IfNotPresent
       restartPolicy: Always
       
