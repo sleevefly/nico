@@ -6,6 +6,7 @@ import (
 	"github.com/sirupsen/logrus"
 	"net/http"
 	"nico/conf"
+	"nico/service"
 	"os"
 	"os/signal"
 	"syscall"
@@ -21,6 +22,7 @@ func main() {
 		time.Sleep(5 * time.Second)
 		c.JSON(http.StatusOK, "pong")
 	})
+	r.GET("/ws", service.WebSocketHandler)
 
 	srv := &http.Server{
 		Addr:    "0.0.0.0:8080",
