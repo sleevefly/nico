@@ -25,7 +25,6 @@ func main() {
 	conf.Init_logrus("./logs/")
 
 	r.GET("/ping", func(c *gin.Context) {
-		time.Sleep(5 * time.Second)
 		c.JSON(http.StatusOK, "pong")
 	})
 	r.GET("/ws", service.WebSocketHandler)
