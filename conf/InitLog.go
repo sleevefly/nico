@@ -75,4 +75,5 @@ func Init_logrus(logFilePath string) {
 
 	logrus.SetLevel(logrus.WarnLevel)
 	logrus.SetOutput(log)
+	logrus.SetFormatter(&LogFormatter{})
 }
