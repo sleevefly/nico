@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
 	"net/http"
@@ -16,19 +17,26 @@ import (
 func main() {
 	r := gin.Default()
 	gin.SetMode("release")
-	conf.InitLog()
+	err := conf.Init("./logs/")
+	if err != nil {
+		fmt.Printf("log init err %s\n", err.Error())
+		return
+	}
+	conf.Init_logrus("./logs/")
 
 	r.GET("/ping", func(c *gin.Context) {
 		time.Sleep(5 * time.Second)
 		c.JSON(http.StatusOK, "pong")
 	})
 	r.GET("/ws", service.WebSocketHandler)
+	r.GET("/changelog", service.ChangeLog)
 
 	srv := &http.Server{
 		Addr:    "0.0.0.0:8080",
 		Handler: r,
 	}
 
+	logrus.Debug("init project")
 	// Initializing the server in a goroutine so that it won't block the graceful shutdown handling below
 	go func() {
 		if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
@@ -43,7 +51,10 @@ func main() {
 	// kill -9 is syscall.SIGKILL but can't be catch, so don't need add it
 	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
 	<-quit
-	logrus.Println("Shutting down server...")
+	logrus.Debug("Shutting down server...")
+	logrus.Warn("Shutting down server..")
+	logrus.Info("Shutting down server..")
+	logrus.Error("Shutting down server..")
 
 	// The context is used to inform the server it has 5 seconds to finish the request it is currently handling
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
@@ -52,5 +63,5 @@ func main() {
 		logrus.Fatal("Server forced to shutdown: ", err)
 	}
 
-	logrus.Println("Server exiting")
+	logrus.Debug("Server exiting")
 }
