@@ -6,28 +6,36 @@ import (
 )
 
 type GWindowsRate struct {
+	mu          sync.RWMutex
 	WindowsRate map[string]*SlidingWindowRateLimiter
 }
 
 // NewGWindowsRate 创建一个全局的滑动窗口管理器
 func NewGWindowsRate() *GWindowsRate {
 	return &GWindowsRate{
-		make(map[string]*SlidingWindowRateLimiter),
+		mu:          sync.RWMutex{},
+		WindowsRate: make(map[string]*SlidingWindowRateLimiter),
 	}
 }
 
 // SetSlidingWindowRateLimiter 将滑动窗口放进全局管理器中
 func (rate *GWindowsRate) SetSlidingWindowRateLimiter(rateLimiter *SlidingWindowRateLimiter) {
+	rate.mu.Lock()
+	defer rate.mu.Unlock()
 	rate.WindowsRate[rateLimiter.name] = rateLimiter
 }
 
 // SetSlidingWindowRateLimiterSource 若全局管理器中不存在就创建一个
 func (rate *GWindowsRate) SetSlidingWindowRateLimiterSource(name string, windowSize int, maxRequests int, interval time.Duration) {
+	rate.mu.Lock()
+	defer rate.mu.Unlock()
 	rate.WindowsRate[name] = NewSlidingWindowRateLimiter(name, windowSize, maxRequests, interval)
 }
 
 // GetSlidingWindowRateLimiter 获取对应名称的滑动窗口
 func (rate *GWindowsRate) GetSlidingWindowRateLimiter(name string) *SlidingWindowRateLimiter {
+	rate.mu.RLock()
+	defer rate.mu.RUnlock()
 	if val, ok := rate.WindowsRate[name]; ok {
 		return val
 	}
