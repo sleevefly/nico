@@ -38,7 +38,7 @@ func (rate *GWindowsRate) Allow(name string, def bool) bool {
 	limiter := rate.GetSlidingWindowRateLimiter(name)
 	if limiter == nil {
 		if def {
-			rate.SetSlidingWindowRateLimiter(NewSlidingWindowRateLimiter(name, 10, 5, time.Second*10))
+			rate.SetSlidingWindowRateLimiter(NewSlidingWindowRateLimiter(name, 10, 10, time.Second*10))
 			return false
 		}
 		return true
