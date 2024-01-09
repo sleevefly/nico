@@ -2,29 +2,32 @@ package main
 
 import (
 	"context"
-	"fmt"
-	"github.com/gin-gonic/gin"
-	"github.com/sirupsen/logrus"
 	"net/http"
 	"nico/conf"
+	"nico/limiter"
+	"nico/middle"
 	"nico/service"
 	"os"
 	"os/signal"
 	"syscall"
 	"time"
+
+	"github.com/gin-gonic/gin"
+	"github.com/sirupsen/logrus"
 )
 
 func main() {
 	r := gin.Default()
 	gin.SetMode("release")
-	err := conf.Init("./logs/")
-	if err != nil {
-		fmt.Printf("log init err %s\n", err.Error())
-		return
-	}
+	// err := conf.Init("./logs/")
+	// if err != nil {
+	// 	fmt.Printf("log init err %s\n", err.Error())
+	// 	return
+	// }
 	conf.Init_logrus("./logs/")
+	rate := limiter.NewGWindowsRate()
 
-	r.GET("/ping", func(c *gin.Context) {
+	r.GET("/ping", middle.SlidingWindowRateLimiterMiddleware(rate), func(c *gin.Context) {
 		c.JSON(http.StatusOK, "pong")
 	})
 	r.GET("/ws", service.WebSocketHandler)
