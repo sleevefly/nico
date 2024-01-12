@@ -30,7 +30,7 @@ func TestReverseList(t *testing.T) {
 
 	for _, tc := range testCases {
 		// 执行测试用例
-		actual := reserveList(tc.head)
+		actual := reserveList1(tc.head)
 		fmt.Println(actual)
 	}
 }
@@ -38,4 +38,9 @@ func TestReverseList(t *testing.T) {
 func TestLengthOfLongestSubstring(t *testing.T) {
 	substring := lengthOfLongestSubstring("bbbbb")
 	fmt.Println(substring)
+}
+
+func TestMax(t *testing.T) {
+	water := maxArea([]int{1, 2, 12, 1, 1, 1, 1, 2, 5})
+	fmt.Println(water)
 }
