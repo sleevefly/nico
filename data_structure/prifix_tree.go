@@ -8,7 +8,6 @@ func str(haystack string, needle string) int {
 	table := make([]int, len(needle))
 
 	for j, i := 0, 1; i < m; i++ {
-
 		for j > 0 && needle[i] != needle[j] {
 			j = table[j-1]
 		}
@@ -16,7 +15,6 @@ func str(haystack string, needle string) int {
 			j++
 		}
 		table[i] = j
-
 	}
 
 	for i, j := 0, 0; i < n; i++ {
@@ -61,4 +59,20 @@ func strV1(str, text string) {
 			return
 		}
 	}
+}
+
+func generationCode(text string) []int {
+	tables := make([]int, len(text))
+	n := len(text)
+	for j, i := 0, 1; i < n; i++ {
+		for j > 0 && text[i] != text[j] {
+			j = tables[j-1]
+		}
+		if text[i] == text[j] {
+			j++
+			i++
+		}
+		tables[i] = j
+	}
+	return tables
 }
