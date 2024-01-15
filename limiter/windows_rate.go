@@ -95,3 +95,7 @@ func (s *SlidingWindowRateLimiter) Allow() bool {
 
 	return false
 }
+
+func ReteLimiter() {
+
+}

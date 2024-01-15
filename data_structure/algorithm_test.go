@@ -44,3 +44,30 @@ func TestMax(t *testing.T) {
 	water := maxArea([]int{1, 2, 12, 1, 1, 1, 1, 2, 5})
 	fmt.Println(water)
 }
+
+func TestWinner(t *testing.T) {
+	winner := isWinner([]int{4, 10, 7, 9}, []int{6, 5, 2, 3})
+	fmt.Println(winner)
+}
+
+func TestNext(t *testing.T) {
+
+}
+
+func TestMaxHeap(t *testing.T) {
+	h := NewMaxHeap()
+	h.Push(4)
+	h.Push(10)
+	h.Push(8)
+	h.Push(5)
+	h.Push(1)
+
+	for h.Len() > 0 {
+		max, _ := h.Pop()
+		fmt.Printf("%d ", max)
+	}
+}
+func TestStr(t *testing.T) {
+	i := str("aabdaabaaf", "aabaaf")
+	fmt.Println(i)
+}
