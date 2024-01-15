@@ -83,3 +83,8 @@ func TestDeleteItem(t *testing.T) {
 	duplicates := deleteItem(head, 3)
 	fmt.Println(duplicates)
 }
+
+func TestPrintAb(t *testing.T) {
+	printAb()
+
+}

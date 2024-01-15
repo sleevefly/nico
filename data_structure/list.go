@@ -1,5 +1,10 @@
 package data_structure
 
+import (
+	"fmt"
+	"sync"
+)
+
 type ListNode struct {
 	Val  int
 	Next *ListNode
@@ -118,4 +123,38 @@ func deleteItem(head *ListNode, target int) *ListNode {
 		}
 	}
 	return dummy.Next
+}
+
+type SharedData struct {
+	currentLetter string
+}
+
+func printLetter(letter string, wg *sync.WaitGroup, mu *sync.Mutex, condition *sync.Cond, sharedData *SharedData) {
+	defer wg.Done()
+
+	for i := 0; i < 5; i++ {
+		// 加锁，保证在访问共享资源时的并发安全性
+		mu.Lock()
+
+		// 检查条件是否满足，如果不满足则等待
+		for sharedData.currentLetter != letter {
+			condition.Wait()
+		}
+
+		// 满足条件，打印字母
+		fmt.Print(letter)
+
+		// 切换到下一个字母
+		if letter == "a" {
+			sharedData.currentLetter = "b"
+		} else {
+			sharedData.currentLetter = "a"
+		}
+
+		// 通知其他等待的goroutine条件已经发生改变
+		condition.Broadcast()
+
+		// 解锁
+		mu.Unlock()
+	}
 }
