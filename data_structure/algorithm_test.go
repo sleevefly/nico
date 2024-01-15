@@ -71,3 +71,15 @@ func TestStr(t *testing.T) {
 	i := str("aabdaabaaf", "aabaaf")
 	fmt.Println(i)
 }
+
+func TestDelete(t *testing.T) {
+	head := &ListNode{Val: 1, Next: &ListNode{Val: 2, Next: &ListNode{Val: 3, Next: &ListNode{Val: 3, Next: &ListNode{Val: 4}}}}}
+	duplicates := deleteDuplicates(head)
+	fmt.Println(duplicates)
+}
+
+func TestDeleteItem(t *testing.T) {
+	head := &ListNode{Val: 1, Next: &ListNode{Val: 2, Next: &ListNode{Val: 3, Next: &ListNode{Val: 3, Next: &ListNode{Val: 4, Next: &ListNode{Val: 3}}}}}}
+	duplicates := deleteItem(head, 3)
+	fmt.Println(duplicates)
+}

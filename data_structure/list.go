@@ -26,6 +26,7 @@ func reserveList(head *ListNode) *ListNode {
 	// 返回反转后的链表头节点
 	return pre
 }
+
 func lengthOfLongestSubstring1(s string) int {
 	// 哈希集合，记录每个字符是否出现过
 	m := map[byte]int{}
@@ -76,4 +77,45 @@ func lengthOfLongestSubstring(s string) int {
 		return subLength
 	}
 	return 0
+}
+
+func deleteDuplicates(head *ListNode) *ListNode {
+
+	if head == nil {
+		return nil
+	}
+
+	dummy := &ListNode{0, head}
+	cur := dummy
+
+	for cur.Next != nil && cur.Next.Next != nil {
+		//判断是否相等
+		if cur.Next.Val == cur.Next.Next.Val {
+			tmp := cur.Next.Next.Val
+			//删除操作
+			for cur.Next != nil && cur.Next.Val == tmp {
+				cur.Next = cur.Next.Next
+			}
+		} else {
+			//移动
+			cur = cur.Next
+		}
+	}
+	return dummy.Next
+}
+
+func deleteItem(head *ListNode, target int) *ListNode {
+	if head == nil {
+		return nil
+	}
+	dummy := &ListNode{0, head}
+	cur := dummy
+	for cur.Next != nil {
+		if cur.Next.Val == target {
+			cur.Next = cur.Next.Next
+		} else {
+			cur = cur.Next
+		}
+	}
+	return dummy.Next
 }
