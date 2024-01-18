@@ -85,6 +85,14 @@ func TestDeleteItem(t *testing.T) {
 }
 
 func TestPrintAb(t *testing.T) {
-	printAb()
+	backtracking([]int{1, -1, 9, -9}, 0)
 
+}
+
+func TestMisra(t *testing.T) {
+	stream := []string{"a", "b", "c", "a", "b", "a", "a", "a", "d", "e", "f", "d", "f", "d", "e", "a", "c"}
+	k := 5
+
+	result := MisraGries(stream, k)
+	fmt.Printf("%v\n", result)
 }
