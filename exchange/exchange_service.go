@@ -1,0 +1,5 @@
+package exchange
+
+func InitExchangeService() {
+
+}

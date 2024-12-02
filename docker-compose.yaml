@@ -1,2 +1,3 @@
 services:
   - name:
+      dns_search: "225.5.5.5"
