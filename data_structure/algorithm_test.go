@@ -2,6 +2,7 @@ package data_structure
 
 import (
 	"fmt"
+	"math"
 	"testing"
 )
 
@@ -95,4 +96,25 @@ func TestMisra(t *testing.T) {
 
 	result := MisraGries(stream, k)
 	fmt.Printf("%v\n", result)
+}
+func TestReverse(t *testing.T) {
+	i := reverse(1534236469)
+	fmt.Println(i)
+}
+
+func reverse(x int) int {
+	num := 0
+	for x != 0 {
+		num = num*10 + x%10
+		x /= 10
+	}
+	if num > math.MaxInt32 || num < math.MinInt32 {
+		return 0
+	}
+	return num
+
+}
+
+func TestName(t *testing.T) {
+
 }

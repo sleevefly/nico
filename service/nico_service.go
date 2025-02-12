@@ -53,3 +53,7 @@ func ExchangeService(exchangeId int, req *http.Request) {
 	err = newExchange.ParseResponse()
 
 }
+
+func Sum() {
+
+}

@@ -21,6 +21,6 @@ func NewDsp(dspId int) (Dsp, error) {
 	case 2:
 		return NewAppLinkDsp(), nil
 	default:
-		return nil, errors.New("unknown exchange ID")
+		return nil, errors.New("unknown dsp ID")
 	}
 }
