@@ -1,12 +1,30 @@
 package service
 
 import (
+	"context"
 	"fmt"
 	"net/http"
-	"nico/dsp"
 	"nico/exchange"
-	"nico/proto"
+	"sync"
 )
+
+var (
+	defaultAggregatorOnce sync.Once
+	defaultAggregator     *DspAggregator
+)
+
+func getDefaultAggregator() *DspAggregator {
+	defaultAggregatorOnce.Do(func() {
+		cfg := LoadDSPRuntimeConfigFromEnv()
+		dspIDs := []int{1, 2}
+		factory := NewDSPClientFactory()
+		if err := factory.RegisterFromConfigs(defaultHTTPCaller, LoadDSPClientConfigsFromEnv(dspIDs)); err != nil {
+			fmt.Printf("register dsp routes from env failed: %v\n", err)
+		}
+		defaultAggregator = NewDspAggregator(NewLateResponseStore(cfg.LateResponseTTL), nil)
+	})
+	return defaultAggregator
+}
 
 func ExchangeService(exchangeId int, req *http.Request) {
 
@@ -26,29 +44,17 @@ func ExchangeService(exchangeId int, req *http.Request) {
 	//设置request
 
 	//获取dsp
-
-	dspIds := []int{}
-	//请求
-	responses := make([]proto.NicoResponse, len(dspIds))
-	for _, id := range dspIds {
-		newDsp, err := dsp.NewDsp(id)
-		if newDsp == nil || err != nil {
-			responses = append(responses, proto.NicoResponse{})
-			continue
-		}
-		if err = newDsp.ParseDspRequest(nil); err != nil {
-			responses = append(responses, proto.NicoResponse{})
-			continue
-		}
-
-	}
+	dspIds := []int{1, 2}
+	cfg := LoadDSPRuntimeConfigFromEnv()
+	aggregator := getDefaultAggregator()
+	results := aggregator.AggregateWithCache(context.Background(), nicoRequest, dspIds, cfg.MainWaitTimeout, cfg.SingleDSPTimeout)
 
 	//排序 responses
 
 	// 最终的response
 
 	//请求广告
-	fmt.Println(nicoRequest)
+	fmt.Println(nicoRequest, results)
 
 	err = newExchange.ParseResponse()
 
